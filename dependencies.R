@@ -2,3 +2,4 @@
 library(rhino)
 library(treesitter)
 library(treesitter.r)
+library(trisk.analysis)
