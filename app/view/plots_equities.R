@@ -1,5 +1,5 @@
 box::use(
-  shiny[moduleServer, NS, plotOutput, renderPlot, observeEvent, fluidRow]
+  shiny[fluidRow, moduleServer, NS, observeEvent, plotOutput, renderPlot],
 )
 
 
@@ -42,7 +42,6 @@ server <- function(id, analysis_data_r, max_trisk_granularity) {
       output$exposure_change_plot <- renderPlot({
         exposure_change_plot
       })
-
     })
   })
 }

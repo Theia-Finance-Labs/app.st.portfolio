@@ -1,15 +1,27 @@
 box::use(
+  semantic.dashboard[dashboardSidebar],
   shiny[
-    moduleServer, NS, observe, div, tags, reactiveVal, reactiveValues, eventReactive, p, tagList, observeEvent, img,
-    HTML, conditionalPanel
+    conditionalPanel,
+    div,
+    eventReactive,
+    HTML,
+    img,
+    moduleServer,
+    NS,
+    observe,
+    observeEvent,
+    p,
+    reactiveVal,
+    reactiveValues,
+    tagList,
+    tags
   ],
-  shiny.semantic[slider_input, dropdown_input, segment, update_dropdown_input, update_slider],
+  shiny.semantic[dropdown_input, segment, slider_input, update_dropdown_input, update_slider],
   shinyjs[useShinyjs],
-  semantic.dashboard[dashboardSidebar]
 )
 
 box::use(
-  app/logic/renamings[rename_string_vector]
+  app/logic/renamings[rename_string_vector],
 )
 
 ui <- function(id, max_trisk_granularity) {

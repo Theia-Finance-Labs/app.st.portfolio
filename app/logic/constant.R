@@ -1,18 +1,18 @@
 # CLOUD SERVICES CONSTANT
 
 
-    TRISK_POSTGRES_DB <- Sys.getenv("TRISK_POSTGRES_DB")
-    TRISK_POSTGRES_HOST <- Sys.getenv("TRISK_POSTGRES_HOST")
-    TRISK_POSTGRES_PORT <- Sys.getenv("TRISK_POSTGRES_PORT")
-    TRISK_POSTGRES_USER <- Sys.getenv("TRISK_POSTGRES_USER")
-    TRISK_POSTGRES_PASSWORD <- Sys.getenv("TRISK_POSTGRES_PASSWORD")
+TRISK_POSTGRES_DB <- Sys.getenv("TRISK_POSTGRES_DB")
+TRISK_POSTGRES_HOST <- Sys.getenv("TRISK_POSTGRES_HOST")
+TRISK_POSTGRES_PORT <- Sys.getenv("TRISK_POSTGRES_PORT")
+TRISK_POSTGRES_USER <- Sys.getenv("TRISK_POSTGRES_USER")
+TRISK_POSTGRES_PASSWORD <- Sys.getenv("TRISK_POSTGRES_PASSWORD")
 # PROJECT CONSTANTS ====================================
 
-trisk_input_path <- file.path("app","data","trisk_inputs")
+TRISK_INPUT_PATH <- file.path("app", "data", "trisk_inputs")
 
 # # TRISK CONFIG
 
-available_vars <- list(
+AVAILABLE_VARS <- list(
   available_risk_free_rate = c(
     0,
     0.01,
@@ -51,7 +51,7 @@ available_vars <- list(
 )
 
 
-hide_vars <- list(
+HIDE_VARS <- list(
   hide_baseline_scenario = c(
     # "IPR2021_baseline",
     # "Oxford2021_base",

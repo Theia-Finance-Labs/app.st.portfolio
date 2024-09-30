@@ -1,9 +1,5 @@
-
-
-
 download_db_tables_postgres <- function(conn, tables, save_dir, dbname, host, port, user, password) {
-  
-conn <- DBI::dbConnect(
+  conn <- DBI::dbConnect(
     RPostgres::Postgres(),
     dbname = dbname,
     host = host,
@@ -26,32 +22,30 @@ conn <- DBI::dbConnect(
 }
 
 
-get_possible_trisk_combinations <- function(save_dir){
+get_possible_trisk_combinations <- function(save_dir) {
+  df <- readr::read_csv(file.path(save_dir, "scenarios.csv"))
+  df <- df |>
+    dplyr::mutate(prefix = stringr::str_extract(scenario, "^[^_]+"))
 
-    df <- readr::read_csv(file.path(save_dir, "scenarios.csv"))
-    df <- df |>
-        dplyr::mutate(prefix = stringr::str_extract(scenario, "^[^_]+"))
+  # Baseline dataframe
+  df_baseline <- df |>
+    dplyr::filter(.data$scenario_type == "baseline") |>
+    dplyr::select(.data$prefix, .data$scenario_geography, .data$scenario) |>
+    dplyr::rename(baseline_scenario = .data$scenario) |>
+    dplyr::distinct_all()
 
-# Baseline dataframe
-df_baseline <- df |>
-  dplyr::filter(.data$scenario_type == "baseline") |>
-  dplyr::select(.data$prefix, .data$scenario_geography, .data$scenario) |>
-  dplyr::rename(baseline_scenario = .data$scenario)|>
-  dplyr::distinct_all()
+  # Target dataframe
+  df_target <- df |>
+    dplyr::filter(.data$scenario_type == "target") |>
+    dplyr::select(.data$prefix, .data$scenario_geography, .data$scenario) |>
+    dplyr::rename(target_scenario = .data$scenario) |>
+    dplyr::distinct_all()
 
-# Target dataframe
-df_target <- df |>
-  dplyr::filter(.data$scenario_type == "target") |>
-  dplyr::select(.data$prefix, .data$scenario_geography, .data$scenario) |>
-  dplyr::rename(target_scenario = .data$scenario) |>
-  dplyr::distinct_all()
+  # Merging the two dataframes
+  merged_df <- df_baseline |>
+    dplyr::inner_join(df_target, by = c("prefix", "scenario_geography"))
 
-# Merging the two dataframes
-merged_df <- df_baseline |>
-  dplyr::inner_join(df_target, by = c("prefix", "scenario_geography"))
-
-# Extract unique values
-possible_trisk_combinations <- merged_df |>
-  dplyr::distinct(.data$scenario_geography, .data$baseline_scenario, .data$target_scenario)
-
+  # Extract unique values
+  possible_trisk_combinations <- merged_df |>
+    dplyr::distinct(.data$scenario_geography, .data$baseline_scenario, .data$target_scenario)
 }

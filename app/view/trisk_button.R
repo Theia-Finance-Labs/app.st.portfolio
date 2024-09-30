@@ -1,9 +1,9 @@
 # Load required packages
 box::use(
-  shiny[moduleServer, NS, div, h1, tags, reactiveVal, observeEvent, reactive, observe],
+  semantic.dashboard[dashboardBody, dashboardHeader, dashboardPage, dashboardSidebar],
+  shiny[div, h1, moduleServer, NS, observe, observeEvent, reactive, reactiveVal, tags],
   shiny.semantic[semanticPage],
-  semantic.dashboard[dashboardPage, dashboardBody, dashboardSidebar, dashboardHeader],
-  shinyjs[useShinyjs]
+  shinyjs[useShinyjs],
 )
 
 
@@ -54,26 +54,23 @@ server <- function(
     # TRISK COMPUTATION =========================
     npv_data_r <- reactiveVal(NULL)
     pd_data_r <- reactiveVal(NULL)
-    company_trajectories_r<- reactiveVal(NULL)
+    company_trajectories_r <- reactiveVal(NULL)
 
     # fetch or compute trisk on button click
     shiny::observeEvent(input$run_trisk, ignoreNULL = T, {
-
       trisk_outputs <- run_local_trisk()
 
       npv_data_r(trisk_outputs$npv_results)
       npv_data_r(trisk_outputs$pd_results)
       company_trajectories_r(trisk_outputs$company_trajectories)
-
     })
 
     return(
       list(
         "npv_data_r" = npv_data_r,
         "pd_data_r" = pd_data_r,
-        "company_trajectories_r"=company_trajectories_r
+        "company_trajectories_r" = company_trajectories_r
       )
     )
   })
 }
-

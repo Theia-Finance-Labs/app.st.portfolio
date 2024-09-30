@@ -1,13 +1,25 @@
 box::use(
   shiny[
-    moduleServer, NS, observe, div, tags, reactiveVal, reactiveValues, eventReactive, p, tagList, observeEvent, img,
-    HTML, reactive
+    div,
+    eventReactive,
+    HTML,
+    img,
+    moduleServer,
+    NS,
+    observe,
+    observeEvent,
+    p,
+    reactive,
+    reactiveVal,
+    reactiveValues,
+    tagList,
+    tags
   ],
-  shiny.semantic[update_slider]
+  shiny.semantic[update_slider],
 )
 
 box::use(
-  app/logic/renamings[rename_string_vector]
+  app/logic/renamings[rename_string_vector],
 )
 
 

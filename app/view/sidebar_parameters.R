@@ -1,18 +1,30 @@
 box::use(
+  semantic.dashboard[dashboardSidebar],
   shiny[
-    moduleServer, NS, observe, div, tags, reactiveVal, reactiveValues, eventReactive, p, tagList, observeEvent, img,
-    HTML, conditionalPanel
+    conditionalPanel,
+    div,
+    eventReactive,
+    HTML,
+    img,
+    moduleServer,
+    NS,
+    observe,
+    observeEvent,
+    p,
+    reactiveVal,
+    reactiveValues,
+    tagList,
+    tags
   ],
-  shiny.semantic[slider_input, dropdown_input, segment, update_dropdown_input, update_slider],
+  shiny.semantic[dropdown_input, segment, slider_input, update_dropdown_input, update_slider],
   shinyjs[useShinyjs],
-  semantic.dashboard[dashboardSidebar]
 )
 
 box::use(
-  app/view/modules/params_scenarios,
+  app/logic/renamings[rename_string_vector],
   app/view/modules/params_dimensions,
+  app/view/modules/params_scenarios,
   app/view/modules/params_trisk,
-  app/logic/renamings[rename_string_vector]
 )
 
 
@@ -79,12 +91,11 @@ ui <- function(id, available_vars) {
 ####### Server
 
 
-server <- function(id, 
+server <- function(id,
                    possible_trisk_combinations,
                    available_vars,
                    hide_vars) {
   moduleServer(id, function(input, output, session) {
-    
     # get scenario config
     scenario_config_r <- params_scenarios$server(
       "params_scenarios",

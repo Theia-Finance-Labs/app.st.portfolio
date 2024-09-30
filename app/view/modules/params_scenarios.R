@@ -1,15 +1,28 @@
 box::use(
+  semantic.dashboard[dashboardSidebar],
   shiny[
-    moduleServer, NS, observe, div, tags, reactiveVal, reactiveValues, eventReactive, p, tagList, observeEvent, img,
-    HTML, conditionalPanel, reactive
+    conditionalPanel,
+    div,
+    eventReactive,
+    HTML,
+    img,
+    moduleServer,
+    NS,
+    observe,
+    observeEvent,
+    p,
+    reactive,
+    reactiveVal,
+    reactiveValues,
+    tagList,
+    tags
   ],
-  shiny.semantic[slider_input, dropdown_input, segment, update_dropdown_input, update_slider],
+  shiny.semantic[dropdown_input, segment, slider_input, update_dropdown_input, update_slider],
   shinyjs[useShinyjs],
-  semantic.dashboard[dashboardSidebar]
 )
 
 box::use(
-  app/logic/renamings[rename_string_vector]
+  app/logic/renamings[rename_string_vector],
 )
 
 ui <- function(id) {
@@ -113,7 +126,7 @@ update_scenarios_dropdowns <- function(input, session,
     new_choices <- rename_string_vector(possible_baselines, words_class = "scenarios")
 
     # Update target_scenario dropdown with unique values from the filtered data
-    update_dropdown_input(session, "baseline_scenario", choices = new_choices, value=new_choices[1])
+    update_dropdown_input(session, "baseline_scenario", choices = new_choices, value = new_choices[1])
   })
 
   # Observe changes in baseline_scenario dropdown and update target_scenario dropdown
@@ -132,7 +145,7 @@ update_scenarios_dropdowns <- function(input, session,
     new_choices <- rename_string_vector(possible_shocks, words_class = "scenarios")
 
     # Update target_scenario dropdown with unique values from the filtered data
-    update_dropdown_input(session, "target_scenario", choices = new_choices, value=new_choices[1])
+    update_dropdown_input(session, "target_scenario", choices = new_choices, value = new_choices[1])
   })
 
   # Observe changes in both baseline_scenario and target_scenario dropdowns to update scenario_geography dropdown
@@ -156,6 +169,6 @@ update_scenarios_dropdowns <- function(input, session,
     new_choices <- possible_geographies
 
     # Update scenario_geography dropdown with unique values from the filtered data
-    update_dropdown_input(session, "scenario_geography", choices = new_choices, value=new_choices[1])
+    update_dropdown_input(session, "scenario_geography", choices = new_choices, value = new_choices[1])
   })
 }
