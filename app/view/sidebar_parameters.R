@@ -12,13 +12,12 @@ box::use(
   app/view/modules/params_scenarios,
   app/view/modules/params_dimensions,
   app/view/modules/params_trisk,
-  app/view/modules/trisk_button,
   app/logic/renamings[rename_string_vector]
 )
 
 
 ####### UI
-ui <- function(id, max_trisk_granularity, available_vars) {
+ui <- function(id, available_vars) {
   ns <- NS(id)
   shiny::tagList(
     shiny::tags$head(
@@ -56,14 +55,7 @@ ui <- function(id, max_trisk_granularity, available_vars) {
         }
       ")))
     ),
-    # Data Section
-    div(
-      class = "sidebar-section",
-      shiny::tags$div(class = "ui header", "Data"),
-      shiny::tags$div(class = "ui divider"),
-      # Run TRISK button
-      trisk_button$ui(ns("trisk_button"))
-      ),
+
     # Scenario Choice Section
     div(
       class = "sidebar-section",
@@ -87,12 +79,10 @@ ui <- function(id, max_trisk_granularity, available_vars) {
 ####### Server
 
 
-
-server <- function(id, backend_trisk_run_folder, trisk_input_path,
+server <- function(id, 
                    possible_trisk_combinations,
                    available_vars,
-                   hide_vars,
-                   max_trisk_granularity) {
+                   hide_vars) {
   moduleServer(id, function(input, output, session) {
     
     # get scenario config
@@ -105,12 +95,11 @@ server <- function(id, backend_trisk_run_folder, trisk_input_path,
     # get other trisk params confid
     trisk_config_r <- params_trisk$server("params_trisk", available_vars)
 
-
     # reactive variable containing trisk run parameters
     trisk_run_params_r <- shiny::reactive({
       reactiveValues(
         baseline_scenario = scenario_config_r()$baseline_scenario,
-        shock_scenario = scenario_config_r()$shock_scenario,
+        target_scenario = scenario_config_r()$target_scenario,
         scenario_geography = scenario_config_r()$scenario_geography,
         shock_year = trisk_config_r()$shock_year,
         discount_rate = trisk_config_r()$discount_rate,
@@ -122,23 +111,7 @@ server <- function(id, backend_trisk_run_folder, trisk_input_path,
       )
     })
 
-    results <- trisk_button$server(
-      "trisk_button",
-      trisk_run_params_r = trisk_run_params_r,
-    )
 
-    crispy_data_r <- results$crispy_data_r
-    trajectories_data_r <- results$trajectories_data_r
-    
-
-    perimeter <- list(
-      "trisk_run_params_r" = trisk_run_params_r,
-      "crispy_data_r" = crispy_data_r,
-      "trajectories_data_r" = trajectories_data_r
-    )
-
-    return(list(
-      "perimeter" = perimeter
-    ))
+    return(trisk_run_params_r)
   })
 }

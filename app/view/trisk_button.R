@@ -6,13 +6,6 @@ box::use(
   shinyjs[useShinyjs]
 )
 
-box::use(
-  app/logic/trisk_button_logic[
-    trisk_generator,
-    check_if_run_exists
-  ]
-)
-
 
 
 ####### UI
@@ -59,26 +52,26 @@ server <- function(
     max_trisk_granularity) {
   moduleServer(id, function(input, output, session) {
     # TRISK COMPUTATION =========================
-    crispy_data_r <- reactiveVal(NULL)
-    trajectories_data_r<- reactiveVal(NULL)
+    npv_data_r <- reactiveVal(NULL)
+    pd_data_r <- reactiveVal(NULL)
+    company_trajectories_r<- reactiveVal(NULL)
 
     # fetch or compute trisk on button click
     shiny::observeEvent(input$run_trisk, ignoreNULL = T, {
 
+      trisk_outputs <- run_local_trisk()
 
-    trisk_outputs <- run_local_trisk()
-
-    npv_data_r <- trisk_outputs$npv_results
-    pd_data_r <- trisk_outputs$pd_results
-    trajectories_data_r <- trisk_outputs$company_trajectories
+      npv_data_r(trisk_outputs$npv_results)
+      npv_data_r(trisk_outputs$pd_results)
+      company_trajectories_r(trisk_outputs$company_trajectories)
 
     })
 
-
     return(
       list(
-        "crispy_data_r" = crispy_data_r,
-        "trajectories_data_r" = trajectories_data_r
+        "npv_data_r" = npv_data_r,
+        "pd_data_r" = pd_data_r,
+        "company_trajectories_r"=company_trajectories_r
       )
     )
   })

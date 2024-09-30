@@ -1,9 +1,14 @@
 # CLOUD SERVICES CONSTANT
 
 
+    TRISK_POSTGRES_DB <- Sys.getenv("TRISK_POSTGRES_DB")
+    TRISK_POSTGRES_HOST <- Sys.getenv("TRISK_POSTGRES_HOST")
+    TRISK_POSTGRES_PORT <- Sys.getenv("TRISK_POSTGRES_PORT")
+    TRISK_POSTGRES_USER <- Sys.getenv("TRISK_POSTGRES_USER")
+    TRISK_POSTGRES_PASSWORD <- Sys.getenv("TRISK_POSTGRES_PASSWORD")
 # PROJECT CONSTANTS ====================================
 
-trisk_input_path <- file.path("app", "data", "st_inputs")
+trisk_input_path <- file.path("app","data","trisk_inputs")
 
 # # TRISK CONFIG
 
