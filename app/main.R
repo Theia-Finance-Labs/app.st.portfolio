@@ -11,7 +11,12 @@ box::use(
 box::use(
   # modules
   app/view/sidebar_parameters,
-  app/logic/cloud_logic[get_possible_trisk_combinations_from_api]
+    # logic
+  app/logic/constant[
+    trisk_input_path,
+    available_vars,
+    hide_vars
+  ]
 )
 
 
@@ -25,36 +30,16 @@ ui <- function(id) {
     # CONTENT PAGE
     tags$div(
       class = "header", # Add a loading overlay
-      tags$head(
-        tags$style(HTML("
-            #loading-overlay {
-              position: fixed;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: rgba(255, 255, 255, 0.8);
-              z-index: 9999;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 2em;
-            }
-          "))
-      ),
-      div(id = "loading-overlay", "Initializing...")
     ),
     dashboardPage(
-      title = "Documentation",
+      title = "Crispy",
       # dashboardHeader
-      dashboardHeader(title = "CRISPY"),
+      dashboardHeader(title = "Portfolio ST"),
       # dashboardSidebar
       dashboardSidebar(
         tags$div(
           sidebar_parameters$ui(
-            ns("sidebar_parameters"),
-            max_trisk_granularity = max_trisk_granularity, # constant
-            available_vars = available_vars # constant
+            ns("sidebar_parameters")
           ),
           shiny::img(
             src = "static/logo_life_stress.jpg",
@@ -87,14 +72,8 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    if (Sys.getenv("CRISPY_APP_ENV") == "local") {
-      possible_trisk_combinations <- r2dii.climate.stress.test::get_scenario_geography_x_ald_sector(trisk_input_path)
-    } else if (Sys.getenv("CRISPY_APP_ENV") == "cloud") {
-      possible_trisk_combinations <- get_possible_trisk_combinations_from_api(trisk_api_service = TRISK_API_SERVICE)
-    } else {
-      stop("must set environment variable CRISPY_APP_ENV to 'local' or 'cloud'")
-    }
-    # the TRISK runs are generated In the sidebar module
+  possible_trisk_combinations <- r2dii.climate.stress.test::get_scenario_geography_x_ald_sector(trisk_input_path)    # the TRISK runs are generated In the sidebar module
+  
     sidebar_parameters_out <- sidebar_parameters$server(
       "sidebar_parameters",
       max_trisk_granularity = max_trisk_granularity, # constant
@@ -106,29 +85,6 @@ server <- function(id) {
     )
 
     perimeter <- sidebar_parameters_out$perimeter
-    portfolio_uploaded_r <- sidebar_parameters_out$portfolio_uploaded_r
 
-    tab_documentation$server("tab_documentation")
-
-    if ((CRISPY_MODE == "equity") | CRISPY_MODE == "") {
-      tab_equities$server(
-        "tab_equities",
-        backend_trisk_run_folder = backend_trisk_run_folder, # constant
-        max_trisk_granularity = max_trisk_granularity, # constant
-        perimeter = perimeter,
-        portfolio_uploaded_r = portfolio_uploaded_r
-      )
-    }
-    if ((CRISPY_MODE == "fixed_income")) {
-      tab_fixed_income$server(
-        "tab_fixed_income",
-        backend_trisk_run_folder = backend_trisk_run_folder, # constant
-        possible_trisk_combinations = possible_trisk_combinations, # computed constant
-        max_trisk_granularity = max_trisk_granularity, # constant
-        perimeter = perimeter,
-        portfolio_uploaded_r = portfolio_uploaded_r
-      )
-    }
-    shinyjs::runjs('$("#loading-overlay").hide();')
   })
 }

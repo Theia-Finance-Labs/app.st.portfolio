@@ -62,17 +62,8 @@ ui <- function(id, max_trisk_granularity, available_vars) {
       shiny::tags$div(class = "ui header", "Data"),
       shiny::tags$div(class = "ui divider"),
       # Run TRISK button
-      trisk_button$ui(ns("trisk_button")),
-      # Dimensions
-      params_dimensions$ui(ns("params_dimensions"), max_trisk_granularity),
-      # Download button
-        tags$a(
-          id = ns("download_scenario_data"),
-          class = "ui fluid button",
-          href = "https://scenarios-repository.fra1.cdn.digitaloceanspaces.com/scenario_repository.zip",
-          target = "_blank",  # Opens the link in a new tab or window
-          "Download Scenario Data")
-  ),
+      trisk_button$ui(ns("trisk_button"))
+      ),
     # Scenario Choice Section
     div(
       class = "sidebar-section",
@@ -103,21 +94,15 @@ server <- function(id, backend_trisk_run_folder, trisk_input_path,
                    hide_vars,
                    max_trisk_granularity) {
   moduleServer(id, function(input, output, session) {
-    # Update UI elements =========================
-
-    # Collect UI elements (and compute trisks if necessary) =========================
-    trisk_granularity_r <- params_dimensions$server(
-      "params_dimensions",
-      max_trisk_granularity = max_trisk_granularity
-    )
-
-
+    
+    # get scenario config
     scenario_config_r <- params_scenarios$server(
       "params_scenarios",
       hide_vars = hide_vars,
       possible_trisk_combinations = possible_trisk_combinations
     )
 
+    # get other trisk params confid
     trisk_config_r <- params_trisk$server("params_trisk", available_vars)
 
 
@@ -140,19 +125,13 @@ server <- function(id, backend_trisk_run_folder, trisk_input_path,
     results <- trisk_button$server(
       "trisk_button",
       trisk_run_params_r = trisk_run_params_r,
-      trisk_granularity_r = trisk_granularity_r,
-      backend_trisk_run_folder = backend_trisk_run_folder,
-      trisk_input_path = trisk_input_path,
-      max_trisk_granularity = max_trisk_granularity
     )
 
     crispy_data_r <- results$crispy_data_r
     trajectories_data_r <- results$trajectories_data_r
     
 
-
     perimeter <- list(
-      "trisk_granularity_r" = trisk_granularity_r,
       "trisk_run_params_r" = trisk_run_params_r,
       "crispy_data_r" = crispy_data_r,
       "trajectories_data_r" = trajectories_data_r
