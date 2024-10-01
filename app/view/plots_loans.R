@@ -29,11 +29,12 @@ server <- function(id, trisk_results_r) {
 
     # PD PLOT
 
-    observeEvent(pipeline_crispy_expected_loss_plot(), {
+    observeEvent(trisk_results_r(), {
       if ((nrow(trisk_results_r()) > 0)) {
+        num_facets <- length(trisk_results_r() |> dplyr::distinct(.data$sector) |> dplyr::pull())
         pd_term_plot <- trisk.analysis::pipeline_crispy_pd_term_plot(
-          crispy_data_agg = trisk_results_r(),
-          facet_var = "technology"
+          analysis_data = trisk_results_r(),
+          facet_var = "sector"
         )
         # id value dynamically generated in the server, just above
         output$pd_term_plot_output <- shiny::renderPlot(
@@ -52,11 +53,10 @@ server <- function(id, trisk_results_r) {
 
     observeEvent(trisk_results_r(), {
       if (nrow(trisk_results_r()) > 0) {
-        num_facets <- length(unique(analysis_data_all_granul_levels[[granul_top_level]]))
-
+        num_facets <- length(trisk_results_r() |> dplyr::distinct(.data$sector) |> dplyr::pull())
         expected_loss_plot <- trisk.analysis::pipeline_crispy_expected_loss_plot(
           analysis_data = trisk_results_r(),
-          facet_var = "technology"
+          facet_var = "sector"
         )
 
         output$expected_loss_plot_output <- shiny::renderPlot(

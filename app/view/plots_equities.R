@@ -30,6 +30,7 @@ ui <- function(id) {
 server <- function(id, trisk_results_r) {
   moduleServer(id, function(input, output, session) {
     observeEvent(trisk_results_r(), {
+
       crispy_npv_change_plot <- trisk.analysis::pipeline_crispy_npv_change_plot(
         trisk_results_r(),
         x_var = "technology"

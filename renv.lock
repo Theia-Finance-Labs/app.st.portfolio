@@ -20,6 +20,23 @@
       ],
       "Hash": "065ae649b05f1ff66bb0c793107508f5"
     },
+    "DT": {
+      "Package": "DT",
+      "Version": "0.33",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "crosstalk",
+        "htmltools",
+        "htmlwidgets",
+        "httpuv",
+        "jquerylib",
+        "jsonlite",
+        "magrittr",
+        "promises"
+      ],
+      "Hash": "64ff3427f559ce3f2597a4fe13255cb6"
+    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-60.0.1",
@@ -408,6 +425,19 @@
         "utils"
       ],
       "Hash": "859d96e65ef198fd43e82b9628d593ef"
+    },
+    "crosstalk": {
+      "Package": "crosstalk",
+      "Version": "1.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R6",
+        "htmltools",
+        "jsonlite",
+        "lazyeval"
+      ],
+      "Hash": "ab12c7b080a57475248a30f4db6298c0"
     },
     "cyclocomp": {
       "Package": "cyclocomp",
@@ -1545,10 +1575,14 @@
     "trisk.analysis": {
       "Package": "trisk.analysis",
       "Version": "1.0.0",
-      "Source": "Local",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "Theia-Finance-Labs",
+      "RemoteRepo": "trisk.analysis",
+      "RemoteRef": "main",
+      "RemoteSha": "64368de5f7ae1e0e6f28b13d767879819fb25fef",
       "Remotes": "Theia-Finance-Labs/trisk.model",
-      "RemoteType": "local",
-      "RemoteUrl": "/Users/bertrandgallice/2° Investing Dropbox/code/Theia-Finance-Labs/trisk.analysis",
       "Requirements": [
         "dplyr",
         "ggplot2",
@@ -1561,7 +1595,7 @@
         "trisk.model",
         "uuid"
       ],
-      "Hash": "82dfe8b51ed223cdea62a9a144f56382"
+      "Hash": "c95a5cf99df849dabce2a4e23fa090b2"
     },
     "trisk.model": {
       "Package": "trisk.model",
