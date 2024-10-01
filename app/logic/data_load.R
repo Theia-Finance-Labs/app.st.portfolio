@@ -23,7 +23,6 @@ download_db_tables_postgres <- function(conn, tables, save_dir, dbname, host, po
 
 
 get_possible_trisk_combinations <- function(scenarios_data) {
-  
   scenarios_data <- scenarios_data |>
     dplyr::mutate(prefix = stringr::str_extract(scenario, "^[^_]+"))
 
@@ -49,5 +48,5 @@ get_possible_trisk_combinations <- function(scenarios_data) {
   possible_trisk_combinations <- merged_scenarios_data |>
     dplyr::distinct(.data$scenario_geography, .data$baseline_scenario, .data$target_scenario)
 
-    return(possible_trisk_combinations)
+  return(possible_trisk_combinations)
 }

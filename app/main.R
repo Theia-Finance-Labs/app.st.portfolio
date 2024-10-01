@@ -25,11 +25,11 @@ box::use(
     TRISK_POSTGRES_USER
   ],
   app/logic/data_load[download_db_tables_postgres, get_possible_trisk_combinations],
+  app/view/plots_equities,
+  app/view/plots_loans,
   app/view/sidebar_parameters,
   app/view/trisk_button,
   app/view/upload_portfolio_button,
-  app/view/plots_equities,
-  app/view/plots_loans
 )
 
 
@@ -59,16 +59,16 @@ ui <- function(id) {
             shiny::tags$div(class = "ui divider"),
             # Button container with vertical spacing
             tags$div(
-  class = "ui stackable aligned grid",  # Centered and stackable grid layout for better alignment
-  tags$div(
-    class = "row",
-              upload_portfolio_button$ui(ns("upload_portfolio_button"))
-                ),
-  tags$div(
-    class = "row",
-              trisk_button$ui(ns("trisk_button"))
-  ))
-            
+              class = "ui stackable aligned grid", # Centered and stackable grid layout for better alignment
+              tags$div(
+                class = "row",
+                upload_portfolio_button$ui(ns("upload_portfolio_button"))
+              ),
+              tags$div(
+                class = "row",
+                trisk_button$ui(ns("trisk_button"))
+              )
+            )
           ),
           sidebar_parameters$ui(
             ns("sidebar_parameters"),
@@ -142,16 +142,15 @@ server <- function(id) {
     portfolio_data_r <- upload_portfolio_button$server("upload_portfolio_button", assets_data)
 
     trisk_results_r <- trisk_button$server(
-        "trisk_button",
-        assets_data=assets_data,
-        scenarios_data=scenarios_data,
-        financial_data=financial_data,
-        carbon_data=carbon_data,
-        portfolio_data_r=portfolio_data_r,
-        trisk_run_params_r=trisk_run_params_r
+      "trisk_button",
+      assets_data = assets_data,
+      scenarios_data = scenarios_data,
+      financial_data = financial_data,
+      carbon_data = carbon_data,
+      portfolio_data_r = portfolio_data_r,
+      trisk_run_params_r = trisk_run_params_r
     )
 
-  plots_equities$server(id="plots_equities", trisk_results_r=trisk_results_r)
-    
+    plots_equities$server(id = "plots_equities", trisk_results_r = trisk_results_r)
   })
 }
