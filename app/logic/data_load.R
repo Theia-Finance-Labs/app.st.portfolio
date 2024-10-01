@@ -22,30 +22,32 @@ download_db_tables_postgres <- function(conn, tables, save_dir, dbname, host, po
 }
 
 
-get_possible_trisk_combinations <- function(save_dir) {
-  df <- readr::read_csv(file.path(save_dir, "scenarios.csv"))
-  df <- df |>
+get_possible_trisk_combinations <- function(scenarios_data) {
+  
+  scenarios_data <- scenarios_data |>
     dplyr::mutate(prefix = stringr::str_extract(scenario, "^[^_]+"))
 
   # Baseline dataframe
-  df_baseline <- df |>
+  scenarios_data_baseline <- scenarios_data |>
     dplyr::filter(.data$scenario_type == "baseline") |>
     dplyr::select(.data$prefix, .data$scenario_geography, .data$scenario) |>
     dplyr::rename(baseline_scenario = .data$scenario) |>
     dplyr::distinct_all()
 
   # Target dataframe
-  df_target <- df |>
+  scenarios_data_target <- scenarios_data |>
     dplyr::filter(.data$scenario_type == "target") |>
     dplyr::select(.data$prefix, .data$scenario_geography, .data$scenario) |>
     dplyr::rename(target_scenario = .data$scenario) |>
     dplyr::distinct_all()
 
   # Merging the two dataframes
-  merged_df <- df_baseline |>
-    dplyr::inner_join(df_target, by = c("prefix", "scenario_geography"))
+  merged_scenarios_data <- scenarios_data_baseline |>
+    dplyr::inner_join(scenarios_data_target, by = c("prefix", "scenario_geography"))
 
   # Extract unique values
-  possible_trisk_combinations <- merged_df |>
+  possible_trisk_combinations <- merged_scenarios_data |>
     dplyr::distinct(.data$scenario_geography, .data$baseline_scenario, .data$target_scenario)
+
+    return(possible_trisk_combinations)
 }

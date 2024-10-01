@@ -27,6 +27,9 @@ box::use(
   app/logic/data_load[download_db_tables_postgres, get_possible_trisk_combinations],
   app/view/sidebar_parameters,
   app/view/trisk_button,
+  app/view/upload_portfolio_button,
+  app/view/plots_equities,
+  app/view/plots_loans
 )
 
 
@@ -50,12 +53,22 @@ ui <- function(id) {
       dashboardSidebar(
         # Data Section
         tags$div(
-          div(
+          tags$div(
             class = "sidebar-section",
             shiny::tags$div(class = "ui header", "Analysis"),
             shiny::tags$div(class = "ui divider"),
-            # Run TRISK button
-            trisk_button$ui(ns("trisk_button"))
+            # Button container with vertical spacing
+            tags$div(
+  class = "ui stackable aligned grid",  # Centered and stackable grid layout for better alignment
+  tags$div(
+    class = "row",
+              upload_portfolio_button$ui(ns("upload_portfolio_button"))
+                ),
+  tags$div(
+    class = "row",
+              trisk_button$ui(ns("trisk_button"))
+  ))
+            
           ),
           sidebar_parameters$ui(
             ns("sidebar_parameters"),
@@ -80,7 +93,7 @@ ui <- function(id) {
       dashboardBody(
         div(
           class = "ui container",
-          NULL
+          plots_equities$ui("plots_equities")
         )
       )
     )
@@ -113,17 +126,32 @@ server <- function(id) {
         password = TRISK_POSTGRES_PASSWORD
       )
     }
-    possible_trisk_combinations <- get_possible_trisk_combinations(save_dir = TRISK_INPUT_PATH) # Updated here
+
+    assets_data <- readr::read_csv(file.path(TRISK_INPUT_PATH, "assets.csv"), show_col_types = FALSE)
+    scenarios_data <- readr::read_csv(file.path(TRISK_INPUT_PATH, "scenarios.csv"), show_col_types = FALSE)
+    financial_data <- readr::read_csv(file.path(TRISK_INPUT_PATH, "financial_features.csv"), show_col_types = FALSE)
+    carbon_data <- readr::read_csv(file.path(TRISK_INPUT_PATH, "ngfs_carbon_price.csv"), show_col_types = FALSE)
+
+    possible_trisk_combinations <- get_possible_trisk_combinations(scenarios_data = scenarios_data) # Updated here
     trisk_run_params_r <- sidebar_parameters$server(
       "sidebar_parameters",
       possible_trisk_combinations = possible_trisk_combinations,
       available_vars = AVAILABLE_VARS, # Updated here
       hide_vars = HIDE_VARS # Updated here
     )
+    portfolio_data_r <- upload_portfolio_button$server("upload_portfolio_button", assets_data)
 
-    results_r <- trisk_button$server(
-      "trisk_button",
-      trisk_run_params_r = trisk_run_params_r,
+    trisk_results_r <- trisk_button$server(
+        "trisk_button",
+        assets_data=assets_data,
+        scenarios_data=scenarios_data,
+        financial_data=financial_data,
+        carbon_data=carbon_data,
+        portfolio_data_r=portfolio_data_r,
+        trisk_run_params_r=trisk_run_params_r
     )
+
+  plots_equities$server(id="plots_equities", trisk_results_r=trisk_results_r)
+    
   })
 }

@@ -50,17 +50,18 @@ ui <- function(id) {
             choices = NULL
           )
         )
-      ),
-      div(
-        class = "content",
-        p("Scenario Geography"),
-        div(
-          class = "description",
-          shiny.semantic::dropdown_input(ns("scenario_geography"),
-            choices = NULL
-          )
-        )
       )
+      # ,
+      # div(
+      #   class = "content",
+      #   p("Scenario Geography"),
+      #   div(
+      #     class = "description",
+      #     shiny.semantic::dropdown_input(ns("scenario_geography"),
+      #       choices = NULL
+      #     )
+      #   )
+      # )
     )
   )
 }
@@ -80,10 +81,10 @@ server <- function(id,
       renamed_choice <- rename_string_vector(choice, words_class = "scenarios", dev_to_ux = FALSE)
       return(renamed_choice)
     })
-    selected_geography_r <- reactive({
-      choice <- input$scenario_geography
-      return(choice)
-    })
+    # selected_geography_r <- reactive({
+    #   choice <- input$scenario_geography
+    #   return(choice)
+    # })
 
     # synchronise dropdown choices  with the possible combinations
     update_scenarios_dropdowns(
@@ -97,8 +98,8 @@ server <- function(id,
     scenario_config_r <- reactive({
       reactiveValues(
         baseline_scenario = selected_baseline_r(),
-        target_scenario = selected_shock_r(),
-        scenario_geography = selected_geography_r()
+        target_scenario = selected_shock_r()
+        # , scenario_geography = selected_geography_r()
       )
     })
 

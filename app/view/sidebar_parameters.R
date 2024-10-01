@@ -111,7 +111,7 @@ server <- function(id,
       reactiveValues(
         baseline_scenario = scenario_config_r()$baseline_scenario,
         target_scenario = scenario_config_r()$target_scenario,
-        scenario_geography = scenario_config_r()$scenario_geography,
+        scenario_geography = "Global", # scenario_config_r()$scenario_geography,
         shock_year = trisk_config_r()$shock_year,
         discount_rate = trisk_config_r()$discount_rate,
         risk_free_rate = trisk_config_r()$risk_free_rate,
