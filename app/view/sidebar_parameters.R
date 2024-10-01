@@ -22,7 +22,6 @@ box::use(
 
 box::use(
   app/logic/renamings[rename_string_vector],
-  app/view/modules/params_dimensions,
   app/view/modules/params_scenarios,
   app/view/modules/params_trisk,
 )

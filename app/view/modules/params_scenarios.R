@@ -70,6 +70,17 @@ server <- function(id,
                    hide_vars,
                    possible_trisk_combinations) {
   moduleServer(id, function(input, output, session) {
+    
+
+    # synchronise dropdown choices  with the possible combinations
+    update_scenarios_dropdowns(
+      input = input,
+      session = session,
+      hide_vars = hide_vars,
+      possible_trisk_combinations = possible_trisk_combinations
+    )
+
+
     # Synchronise the scenarios available depending on user scenario choice
     selected_baseline_r <- reactive({
       choice <- input$baseline_scenario
@@ -81,25 +92,12 @@ server <- function(id,
       renamed_choice <- rename_string_vector(choice, words_class = "scenarios", dev_to_ux = FALSE)
       return(renamed_choice)
     })
-    # selected_geography_r <- reactive({
-    #   choice <- input$scenario_geography
-    #   return(choice)
-    # })
-
-    # synchronise dropdown choices  with the possible combinations
-    update_scenarios_dropdowns(
-      input = input,
-      session = session,
-      hide_vars = hide_vars,
-      possible_trisk_combinations = possible_trisk_combinations
-    )
 
     # RETURN THE SCENARIOS
     scenario_config_r <- reactive({
       reactiveValues(
         baseline_scenario = selected_baseline_r(),
         target_scenario = selected_shock_r()
-        # , scenario_geography = selected_geography_r()
       )
     })
 
@@ -127,7 +125,7 @@ update_scenarios_dropdowns <- function(input, session,
     new_choices <- rename_string_vector(possible_baselines, words_class = "scenarios")
 
     # Update target_scenario dropdown with unique values from the filtered data
-    update_dropdown_input(session, "baseline_scenario", choices = new_choices, value = new_choices[1])
+    update_dropdown_input(session, "baseline_scenario", choices = new_choices)
   })
 
   # Observe changes in baseline_scenario dropdown and update target_scenario dropdown
@@ -146,30 +144,7 @@ update_scenarios_dropdowns <- function(input, session,
     new_choices <- rename_string_vector(possible_shocks, words_class = "scenarios")
 
     # Update target_scenario dropdown with unique values from the filtered data
-    update_dropdown_input(session, "target_scenario", choices = new_choices, value = new_choices[1])
+    update_dropdown_input(session, "target_scenario", choices = new_choices)
   })
 
-  # Observe changes in both baseline_scenario and target_scenario dropdowns to update scenario_geography dropdown
-  observeEvent(input$target_scenario, ignoreInit = TRUE, {
-    selected_baseline <- rename_string_vector(input$baseline_scenario, words_class = "scenarios", dev_to_ux = FALSE)
-    selected_shock <- rename_string_vector(input$target_scenario, words_class = "scenarios", dev_to_ux = FALSE)
-
-    # Filter the data based on selected baseline and shock scenarios
-    possible_geographies <- possible_trisk_combinations |>
-      dplyr::filter(
-        .data$baseline_scenario == selected_baseline,
-        .data$target_scenario == selected_shock
-      ) |>
-      dplyr::group_by(.data$target_scenario, .data$baseline_scenario, .data$scenario_geography) |>
-      dplyr::ungroup() |>
-      dplyr::distinct(.data$scenario_geography) |>
-      dplyr::filter(!is.na(.data$scenario_geography)) |>
-      dplyr::filter(!.data$scenario_geography %in% hide_vars$hide_scenario_geography) |>
-      dplyr::pull()
-
-    new_choices <- possible_geographies
-
-    # Update scenario_geography dropdown with unique values from the filtered data
-    update_dropdown_input(session, "scenario_geography", choices = new_choices, value = new_choices[1])
-  })
 }
