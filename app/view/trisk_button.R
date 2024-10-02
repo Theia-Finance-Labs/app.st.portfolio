@@ -12,6 +12,15 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   tags$div(
+    tags$div(
+      id = ns("mymodal"),
+      class = "ui modal",
+      tags$div(class = "header", "Processing"),
+      tags$div(
+        class = "content",
+        tags$p("Please wait while the model is being run with the chosen parameters. This may take up to 10 minutes.")
+      )
+    ),
     tags$button(
       id = ns("run_trisk"),
       class = "ui fluid button ", # Added custom class for styling
@@ -43,6 +52,12 @@ server <- function(
 
   # Wrap the process in a tryCatch block to handle errors
       tryCatch({
+        #open modal dialog
+        shinyjs::runjs(
+              paste0(
+                "$('#", session$ns("mymodal"), "').modal({closable: true}).modal('show');"
+              )
+            )
             analysis_data <- do.call(
         trisk.analysis::run_trisk_on_portfolio,
         c(
@@ -64,6 +79,12 @@ server <- function(
         # message("Error in run_trisk_sa: ", e$message)
       })
 
+      # close the modal dialog
+      shinyjs::runjs(
+        paste0(
+          "$('#", session$ns("mymodal"), "').modal('hide');"
+        )
+      )
 
     })
 

@@ -7,7 +7,8 @@ box::use(
     NS,
     renderUI,
     tags,
-    uiOutput
+    uiOutput,
+    HTML
   ],
   shiny.semantic[semanticPage],
   shinyjs[useShinyjs],
@@ -42,9 +43,26 @@ ui <- function(id) {
 
   shiny.semantic::semanticPage(
     shinyjs::useShinyjs(), # Initialize shinyjs
-    # CONTENT PAGE
-    tags$div(
+        tags$div(
       class = "header", # Add a loading overlay
+      tags$head(
+        tags$style(HTML("
+            #loading-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(255, 255, 255, 0.8);
+              z-index: 9999;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 2em;
+            }
+          "))
+      ),
+      div(id = "loading-overlay", "Initializing...")
     ),
     dashboardPage(
       title = "Crispy",
@@ -158,5 +176,7 @@ server <- function(id) {
     display_portfolio$server("display_portfolio", trisk_results_r)
     plots_equities$server("plots_equities", trisk_results_r = trisk_results_r)
     plots_loans$server("plots_loans", trisk_results_r=trisk_results_r)
+
+    shinyjs::runjs('$("#loading-overlay").hide();')
   })
 }
