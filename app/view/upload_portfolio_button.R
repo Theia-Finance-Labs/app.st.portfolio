@@ -43,4 +43,3 @@ server <- function(id, assets_data) {
     return(portfolio_data_r)
   })
 }
-

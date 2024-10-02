@@ -2,13 +2,13 @@ box::use(
   semantic.dashboard[dashboardBody, dashboardHeader, dashboardPage, dashboardSidebar],
   shiny[
     div,
+    HTML,
     img,
     moduleServer,
     NS,
     renderUI,
     tags,
-    uiOutput,
-    HTML
+    uiOutput
   ],
   shiny.semantic[semanticPage],
   shinyjs[useShinyjs],
@@ -31,7 +31,7 @@ box::use(
   app/view/plots_loans,
   app/view/sidebar_parameters,
   app/view/trisk_button,
-  app/view/upload_portfolio_button
+  app/view/upload_portfolio_button,
 )
 
 
@@ -43,7 +43,7 @@ ui <- function(id) {
 
   shiny.semantic::semanticPage(
     shinyjs::useShinyjs(), # Initialize shinyjs
-        tags$div(
+    tags$div(
       class = "header", # Add a loading overlay
       tags$head(
         tags$style(HTML("
@@ -110,8 +110,8 @@ ui <- function(id) {
 
       # dashboardBody
       dashboardBody(
-      shiny::tags$div(
-        class = "ui stackable grid",
+        shiny::tags$div(
+          class = "ui stackable grid",
           display_portfolio$ui(ns("display_portfolio")),
           plots_equities$ui(ns("plots_equities")),
           plots_loans$ui(ns("plots_loans"))
@@ -126,10 +126,10 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    if (!dir.exists(TRISK_INPUT_PATH)) { 
-      dir.create(TRISK_INPUT_PATH) 
+    if (!dir.exists(TRISK_INPUT_PATH)) {
+      dir.create(TRISK_INPUT_PATH)
     }
-    if (length(dir(TRISK_INPUT_PATH)) == 0) { 
+    if (length(dir(TRISK_INPUT_PATH)) == 0) {
       tables <- c(
         "assets",
         "scenarios",
@@ -138,7 +138,7 @@ server <- function(id) {
       )
 
       download_db_tables_postgres(
-        save_dir = TRISK_INPUT_PATH, 
+        save_dir = TRISK_INPUT_PATH,
         tables = tables,
         dbname = TRISK_POSTGRES_DB,
         host = TRISK_POSTGRES_HOST,
@@ -153,12 +153,12 @@ server <- function(id) {
     financial_data <- readr::read_csv(file.path(TRISK_INPUT_PATH, "financial_features.csv"), show_col_types = FALSE)
     carbon_data <- readr::read_csv(file.path(TRISK_INPUT_PATH, "ngfs_carbon_price.csv"), show_col_types = FALSE)
 
-    possible_trisk_combinations <- get_possible_trisk_combinations(scenarios_data = scenarios_data) 
+    possible_trisk_combinations <- get_possible_trisk_combinations(scenarios_data = scenarios_data)
     trisk_run_params_r <- sidebar_parameters$server(
       "sidebar_parameters",
       possible_trisk_combinations = possible_trisk_combinations,
-      available_vars = AVAILABLE_VARS, 
-      hide_vars = HIDE_VARS 
+      available_vars = AVAILABLE_VARS,
+      hide_vars = HIDE_VARS
     )
     portfolio_data_r <- upload_portfolio_button$server("upload_portfolio_button", assets_data)
 
@@ -175,7 +175,7 @@ server <- function(id) {
 
     display_portfolio$server("display_portfolio", trisk_results_r)
     plots_equities$server("plots_equities", trisk_results_r = trisk_results_r)
-    plots_loans$server("plots_loans", trisk_results_r=trisk_results_r)
+    plots_loans$server("plots_loans", trisk_results_r = trisk_results_r)
 
     shinyjs::runjs('$("#loading-overlay").hide();')
   })

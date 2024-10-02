@@ -70,8 +70,6 @@ server <- function(id,
                    hide_vars,
                    possible_trisk_combinations) {
   moduleServer(id, function(input, output, session) {
-    
-
     # synchronise dropdown choices  with the possible combinations
     update_scenarios_dropdowns(
       input = input,
@@ -146,5 +144,4 @@ update_scenarios_dropdowns <- function(input, session,
     # Update target_scenario dropdown with unique values from the filtered data
     update_dropdown_input(session, "target_scenario", choices = new_choices)
   })
-
 }

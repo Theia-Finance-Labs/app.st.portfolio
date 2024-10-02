@@ -50,34 +50,37 @@ server <- function(
 
 
 
-  # Wrap the process in a tryCatch block to handle errors
-      tryCatch({
-        #open modal dialog
-        shinyjs::runjs(
-              paste0(
-                "$('#", session$ns("mymodal"), "').modal({closable: true}).modal('show');"
+      # Wrap the process in a tryCatch block to handle errors
+      tryCatch(
+        {
+          # open modal dialog
+          shinyjs::runjs(
+            paste0(
+              "$('#", session$ns("mymodal"), "').modal({closable: true}).modal('show');"
+            )
+          )
+          analysis_data <- do.call(
+            trisk.analysis::run_trisk_on_portfolio,
+            c(
+              trisk_run_params,
+              list(
+                assets_data = assets_data,
+                scenarios_data = scenarios_data,
+                financial_data = financial_data,
+                carbon_data = carbon_data,
+                portfolio_data = portfolio_data_r()
               )
             )
-            analysis_data <- do.call(
-        trisk.analysis::run_trisk_on_portfolio,
-        c(
-          trisk_run_params,
-          list(
-            assets_data = assets_data,
-            scenarios_data = scenarios_data,
-            financial_data = financial_data,
-            carbon_data = carbon_data,
-            portfolio_data = portfolio_data_r()
           )
-        )
-      )
 
-      trisk_results_r(analysis_data)
-      }, error = function(e) {
-        # Handle the error gracefully (log, show message, etc.)
-        shiny::showNotification("Trisk run failed. No data added.", type = "error")
-        # message("Error in run_trisk_sa: ", e$message)
-      })
+          trisk_results_r(analysis_data)
+        },
+        error = function(e) {
+          # Handle the error gracefully (log, show message, etc.)
+          shiny::showNotification("Trisk run failed. No data added.", type = "error")
+          # message("Error in run_trisk_sa: ", e$message)
+        }
+      )
 
       # close the modal dialog
       shinyjs::runjs(
@@ -85,7 +88,6 @@ server <- function(
           "$('#", session$ns("mymodal"), "').modal('hide');"
         )
       )
-
     })
 
     return(
@@ -93,5 +95,3 @@ server <- function(
     )
   })
 }
-
-
