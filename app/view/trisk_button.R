@@ -38,7 +38,12 @@ server <- function(
     shiny::observeEvent(input$run_trisk, ignoreNULL = T, {
       trisk_run_params <- shiny::reactiveValuesToList(trisk_run_params_r())
 
-      analysis_data <- do.call(
+
+
+
+  # Wrap the process in a tryCatch block to handle errors
+      tryCatch({
+            analysis_data <- do.call(
         trisk.analysis::run_trisk_on_portfolio,
         c(
           trisk_run_params,
@@ -53,6 +58,13 @@ server <- function(
       )
 
       trisk_results_r(analysis_data)
+      }, error = function(e) {
+        # Handle the error gracefully (log, show message, etc.)
+        shiny::showNotification("Trisk run failed. No data added.", type = "error")
+        # message("Error in run_trisk_sa: ", e$message)
+      })
+
+
     })
 
     return(
@@ -60,3 +72,5 @@ server <- function(
     )
   })
 }
+
+
