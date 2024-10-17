@@ -1616,7 +1616,6 @@
       "RemoteRef": "main",
       "RemoteSha": "440af38a951da8c34fc77bcd3d8d4af6f64cccd2",
       "RemoteHost": "api.github.com",
-      "Remotes": "Theia-Finance-Labs/trisk.model",
       "Requirements": [
         "dplyr",
         "ggplot2",
@@ -1766,6 +1765,13 @@
         "graphics"
       ],
       "Hash": "07909200e8bbe90426fbfeb73e1e27aa"
+    },
+    "writexl": {
+      "Package": "writexl",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3eb948ad9591d7b34987772d44e4be12"
     },
     "xfun": {
       "Package": "xfun",
