@@ -1,4 +1,4 @@
-download_db_tables_postgres <- function(conn, tables, save_dir, dbname, host, port, user, password) {
+download_db_tables_postgres <- function(conn, tables, save_dir, dbname, host, port, user, password, query_filter=NULL) {
   conn <- DBI::dbConnect(
     RPostgres::Postgres(),
     dbname = dbname,
@@ -14,7 +14,12 @@ download_db_tables_postgres <- function(conn, tables, save_dir, dbname, host, po
   }
 
   for (table_name in tables) {
-    query <- sprintf("SELECT * FROM public.\"%s\"", table_name)
+    if (is.null(query_filter)) {
+      query <- paste0("SELECT * FROM public.", table_name)
+    } else {
+      query <- paste0("SELECT * FROM public.", table_name, " WHERE ", query_filter)
+    }
+
     data <- DBI::dbGetQuery(conn, query)
     file_path <- file.path(save_dir, paste0(table_name, ".csv"))
     readr::write_csv(data, file = file_path)
