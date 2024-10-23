@@ -401,10 +401,10 @@
     },
     "commonmark": {
       "Package": "commonmark",
-      "Version": "1.9.1",
+      "Version": "1.9.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "5d8225445acb167abf7797de48b2ee3c"
+      "Hash": "14eb0596f987c71535d07c3aff814742"
     },
     "config": {
       "Package": "config",
@@ -529,13 +529,13 @@
     },
     "evaluate": {
       "Package": "evaluate",
-      "Version": "1.0.0",
+      "Version": "1.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "6b567375113ceb7d9f800de4dd42218e"
+      "Hash": "3fd29944b231036ad67c3edb32e02201"
     },
     "fansi": {
       "Package": "fansi",
@@ -1181,13 +1181,13 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.0.9",
+      "Version": "1.0.11",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "utils"
       ],
-      "Hash": "ef233f0e9064fc88c898b340c9add5c2"
+      "Hash": "47623f66b4e80b3b0587bc5d7b309888"
     },
     "rex": {
       "Package": "rex",
@@ -1274,10 +1274,10 @@
     },
     "rstudioapi": {
       "Package": "rstudioapi",
-      "Version": "0.16.0",
+      "Version": "0.17.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "96710351d642b70e8f02ddeb237c46a7"
+      "Hash": "fb9f5fce8f609e9b66f0bea5c783f88a"
     },
     "sass": {
       "Package": "sass",
@@ -1608,14 +1608,14 @@
     },
     "trisk.analysis": {
       "Package": "trisk.analysis",
-      "Version": "1.0.0",
+      "Version": "1.2.0",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "Theia-Finance-Labs",
       "RemoteRepo": "trisk.analysis",
       "RemoteRef": "main",
-      "RemoteSha": "440af38a951da8c34fc77bcd3d8d4af6f64cccd2",
-      "RemoteHost": "api.github.com",
+      "RemoteSha": "d96fd036fa5e2e6e7a55c040ec3f970719ae90ab",
       "Requirements": [
         "dplyr",
         "ggplot2",
@@ -1628,18 +1628,18 @@
         "trisk.model",
         "uuid"
       ],
-      "Hash": "700862e3b21b38844012c95d05e8a890"
+      "Hash": "369adfa4f4490eacd0968e11fe123fe8"
     },
     "trisk.model": {
       "Package": "trisk.model",
-      "Version": "2.6.0",
+      "Version": "2.6.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "Theia-Finance-Labs",
       "RemoteRepo": "trisk.model",
       "RemoteRef": "main",
-      "RemoteSha": "33668ca643e0a4843a09a94af856c971b9fd9647",
+      "RemoteSha": "a304f4077f5742cf4cd4f4eb32444a37ed338431",
       "Requirements": [
         "R",
         "dplyr",
@@ -1654,7 +1654,7 @@
         "uuid",
         "zoo"
       ],
-      "Hash": "e0e56fb9e150d30d25f05470826ecbc4"
+      "Hash": "80ab17c98ac35eb8d6d4a24c095359ed"
     },
     "tzdb": {
       "Package": "tzdb",
@@ -1775,7 +1775,7 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.47",
+      "Version": "0.48",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1784,7 +1784,7 @@
         "stats",
         "tools"
       ],
-      "Hash": "36ab21660e2d095fef0d83f689e0477c"
+      "Hash": "89e455b87c84e227eb7f60a1b4e5fe1f"
     },
     "xml2": {
       "Package": "xml2",
